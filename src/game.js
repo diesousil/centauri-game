@@ -10,6 +10,7 @@ let lastTime = 0;
 let gameState = getStartGamestate();
 
 const images = loadImages();
+console.log(images);
 
 setEventHandling(canvas);
 gameLoop(Date.now());

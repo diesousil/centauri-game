@@ -140,12 +140,17 @@ function update(deltaTime) {
 }
 
 function generateObstacle() {
-    const width = 60 + Math.random() * 40;
-    const height = 40 + Math.random() * 60;
+
+    const asteroidType = Math.round(Math.random() * 6);
+    const asteroidImage = images.asteroids[asteroidType];   
+
+    const width = asteroidImage.width;
+    const height = asteroidImage.height;
     
     gameState.obstacles.push({
         x: Math.random() * (canvas.width - width),
         y: -height,
+        image:asteroidImage,
         width: width,
         height: height
     });

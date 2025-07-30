@@ -39,8 +39,10 @@ function renderPlayer() {
 
 function renderObstacles() {
     ctx.fillStyle = '#e74c3c';
+    
     gameState.obstacles.forEach(obstacle => {
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        const angle=0;
+        drawRotatedImage(obstacle.image, obstacle.x, obstacle.y, obstacle.width, obstacle.height, angle);
     });
 }
 
