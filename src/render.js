@@ -23,11 +23,44 @@ function renderSetup() {
     ctx.lineWidth = 2;
 }
 
+function renderStars() {
+    const stars = [];
+    const numStars = 300;
+
+    for (let i = 0; i < numStars; i++) {
+        stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5 + 0.2,
+        alpha: Math.random(),
+        delta: (Math.random() * 0.02) - 0.01 
+        });
+    }
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (const star of stars) {
+      star.alpha += star.delta;
+      if (star.alpha <= 0 || star.alpha >= 1) star.delta *= -1;
+
+      ctx.beginPath();
+      ctx.globalAlpha = star.alpha;
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+    ctx.globalAlpha = 1;
+}
+
 function renderBackground() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    renderStars();
 }
 
 function renderPlayer() {    
@@ -47,7 +80,7 @@ function renderObstacles() {
 }
 
 function renderStats() {
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#fff';
     ctx.font = '24px Arial';
     ctx.fillText(`Score: ${gameState.score}`, 20, 40);
 }
