@@ -22,8 +22,35 @@ function getStartGamestate() {
         obstacles: [],
         score: 0,
         gameOver: false,
-        scrollSpeed: 3
+        scrollSpeed: 3,
+        particles: []
     };
+}
+
+function getFlameColor() {
+    const colors = ['#ffcc00', '#ff6600', '#ff3300'];
+    return colors[Math.floor(Math.random() * colors.length)];
+}
+
+function createThrusterParticles(player) {
+    const intensity = Math.max(0, -player.velocity.y);
+    const count = Math.floor(5 + intensity * 20);
+
+    for (let i = 0; i < count; i++) {
+        const size = Math.random() * 4 + 2;
+        const speed = Math.random() * 2 + 1;
+        const angle = (Math.PI / 2) + (Math.random() * 0.4 - 0.2); 
+
+        gameState.particles.push({
+            x: player.position.x + player.width / 2,
+            y: player.position.y + player.height,
+            vx: speed * Math.cos(angle),
+            vy: speed * Math.sin(angle),
+            size: size,
+            life: 30,
+            color: getFlameColor()
+        });
+    }
 }
 
 function updateVelocity() {
@@ -50,7 +77,7 @@ function updateVelocity() {
 
 function updatePosition(deltaTime) {
     
-    gameState.player.position.x += gameState.player.velocity.x * deltaTime * 60; // *60 para compensar o deltaTime em segundos
+    gameState.player.position.x += gameState.player.velocity.x * deltaTime * 60;
     gameState.player.position.y += gameState.player.velocity.y * deltaTime * 60;
     
     gameState.player.position.x = Math.max(0, 
@@ -99,6 +126,17 @@ function update(deltaTime) {
             }
         }
     });
+
+    gameState.particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+    });
+    gameState.particles = gameState.particles.filter(p => p.life > 0);
+
+    if (gameState.player.acceleration.y < 0) {
+        createThrusterParticles(gameState.player);
+    }
 }
 
 function generateObstacle() {

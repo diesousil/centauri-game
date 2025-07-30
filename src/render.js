@@ -7,6 +7,16 @@ function drawRotatedImage(img, x, y, width, height, angle) {
     ctx.restore();
 }
 
+function drawParticles() {
+    gameState.particles.forEach(p => {
+        ctx.beginPath();
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life / 30;
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+}
 
 function renderSetup() {
     ctx.strokeStyle = '#ccc';
@@ -20,7 +30,9 @@ function renderBackground() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-function renderPlayer() {
+function renderPlayer() {    
+    drawParticles();
+
     let angle = gameState.player.velocity.x * 0.04;
     drawRotatedImage(images.player, gameState.player.position.x, gameState.player.position.y, gameState.player.width, gameState.player.height, angle);
 }
