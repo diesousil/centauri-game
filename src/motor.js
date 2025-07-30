@@ -60,11 +60,9 @@ function updatePosition(deltaTime) {
 }
 
 
-function updateMovement(deltaTime) {
-    
+function updateMovement(deltaTime) {    
     updateVelocity();
     updatePosition(deltaTime)
-
 }
 
 function gameLoop(timestamp) {
@@ -120,42 +118,6 @@ function checkCollision(player, obstacle) {
            player.position.x + player.width > obstacle.x &&
            player.position.y < obstacle.y + obstacle.height &&
            player.position.y + player.height > obstacle.y;
-}
-
-function render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.fillStyle = '#000000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    ctx.strokeStyle = '#ccc';
-    ctx.lineWidth = 2;
-
-    console.log(images);
-    ctx.drawImage(images.player, gameState.player.position.x, gameState.player.position.y, gameState.player.width, gameState.player.height);
-
-    ctx.fillStyle = '#e74c3c';
-    gameState.obstacles.forEach(obstacle => {
-        ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-    });
-    
-    ctx.fillStyle = '#000';
-    ctx.font = '24px Arial';
-    ctx.fillText(`Score: ${gameState.score}`, 20, 40);
-    
-    if (gameState.gameOver) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.fillStyle = '#fff';
-        ctx.font = '48px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2);
-        ctx.font = '24px Arial';
-        ctx.fillText(`Final Score: ${gameState.score}`, canvas.width / 2, canvas.height / 2 + 50);
-        ctx.fillText('Clique para recomeçar', canvas.width / 2, canvas.height / 2 + 100);
-        ctx.textAlign = 'left';
-    }
 }
 
 function resetGame() {
