@@ -1,9 +1,12 @@
+import { globals } from "./globals.js";
+import { render } from "./render.js";
+
 function getStartGamestate() {
     return {
         player: { 
             position: {
-                x: canvas.width / 2, 
-                y: canvas.height - 100, 
+                x: globals.canvas.width / 2, 
+                y: globals.canvas.height - 100, 
             },
             velocity: {
                 x: 0, 
@@ -41,7 +44,7 @@ function createThrusterParticles(player) {
         const speed = Math.random() * 2 + 1;
         const angle = (Math.PI / 2) + (Math.random() * 0.4 - 0.2); 
 
-        gameState.particles.push({
+        globals.gamestate.particles.push({
             x: player.position.x + player.width / 2,
             y: player.position.y + player.height,
             vx: speed * Math.cos(angle),
@@ -54,36 +57,36 @@ function createThrusterParticles(player) {
 }
 
 function updateVelocity() {
-    gameState.player.velocity.x += gameState.player.acceleration.x
-    gameState.player.velocity.y += gameState.player.acceleration.y;
+    globals.gamestate.player.velocity.x += globals.gamestate.player.acceleration.x
+    globals.gamestate.player.velocity.y += globals.gamestate.player.acceleration.y;
     
-    gameState.player.velocity.x = Math.max(-gameState.player.maxSpeed, 
-                                        Math.min(gameState.player.maxSpeed, gameState.player.velocity.x));
+    globals.gamestate.player.velocity.x = Math.max(-globals.gamestate.player.maxSpeed, 
+                                        Math.min(globals.gamestate.player.maxSpeed, globals.gamestate.player.velocity.x));
 
-    gameState.player.velocity.y = Math.max(-gameState.player.maxSpeed, 
-                                        Math.min(gameState.player.maxSpeed, gameState.player.velocity.y));
+    globals.gamestate.player.velocity.y = Math.max(-globals.gamestate.player.maxSpeed, 
+                                        Math.min(globals.gamestate.player.maxSpeed, globals.gamestate.player.velocity.y));
     
-    if (gameState.player.acceleration.x === 0) {
-        gameState.player.velocity.x *= gameState.player.friction;
+    if (globals.gamestate.player.acceleration.x === 0) {
+        globals.gamestate.player.velocity.x *= globals.gamestate.player.friction;
     }
     
-    if (gameState.player.acceleration.y === 0) {
-        gameState.player.velocity.y *= gameState.player.friction;
+    if (globals.gamestate.player.acceleration.y === 0) {
+        globals.gamestate.player.velocity.y *= globals.gamestate.player.friction;
     }
 
-    if (Math.abs(gameState.player.velocity.x) < 0.1) gameState.player.velocity.x = 0;
-    if (Math.abs(gameState.player.velocity.y) < 0.1) gameState.player.velocity.y = 0;
+    if (Math.abs(globals.gamestate.player.velocity.x) < 0.1) globals.gamestate.player.velocity.x = 0;
+    if (Math.abs(globals.gamestate.player.velocity.y) < 0.1) globals.gamestate.player.velocity.y = 0;
 }
 
 function updatePosition(deltaTime) {
     
-    gameState.player.position.x += gameState.player.velocity.x * deltaTime * 60;
-    gameState.player.position.y += gameState.player.velocity.y * deltaTime * 60;
+    globals.gamestate.player.position.x += globals.gamestate.player.velocity.x * deltaTime * 60;
+    globals.gamestate.player.position.y += globals.gamestate.player.velocity.y * deltaTime * 60;
     
-    gameState.player.position.x = Math.max(0, 
-                                       Math.min(canvas.width - gameState.player.width, gameState.player.position.x));
-    gameState.player.position.y = Math.max(0, 
-                                       Math.min(canvas.height - gameState.player.height, gameState.player.position.y));
+    globals.gamestate.player.position.x = Math.max(0, 
+                                       Math.min(globals.canvas.width - globals.gamestate.player.width, globals.gamestate.player.position.x));
+    globals.gamestate.player.position.y = Math.max(0, 
+                                       Math.min(globals.canvas.height - globals.gamestate.player.height, globals.gamestate.player.position.y));
 }
 
 
@@ -93,10 +96,10 @@ function updateMovement(deltaTime) {
 }
 
 function gameLoop(timestamp) {
-    const deltaTime = (timestamp - lastTime) / 1000; 
-    lastTime = timestamp;
+    const deltaTime = (timestamp - globals.lastTime) / 1000; 
+    globals.lastTime = timestamp;
     
-    if (!gameState.gameOver) {
+    if (!globals.gamestate.gameOver) {
         update(deltaTime);
     }
     render();
@@ -110,45 +113,44 @@ function update(deltaTime) {
         generateObstacle();
     }
     
-    gameState.obstacles.forEach((obstacle, index) => {
-        obstacle.y += gameState.scrollSpeed;
+    globals.gamestate.obstacles.forEach((obstacle, index) => {
+        obstacle.y += globals.gamestate.scrollSpeed;
         
-        if (checkCollision(gameState.player, obstacle)) {
-            gameState.gameOver = true;
+        if (checkCollision(globals.gamestate.player, obstacle)) {
+            globals.gamestate.gameOver = true;
         }
         
-        if (obstacle.y > canvas.height) {
-            gameState.obstacles.splice(index, 1);
-            gameState.score++;
+        if (obstacle.y > globals.canvas.height) {
+            globals.gamestate.obstacles.splice(index, 1);
+            globals.gamestate.score++;
             
-            if (gameState.score % 5 === 0) {
-                gameState.scrollSpeed += 0.2;
+            if (globals.gamestate.score % 5 === 0) {
+                globals.gamestate.scrollSpeed += 0.2;
             }
         }
     });
 
-    gameState.particles.forEach(p => {
+    globals.gamestate.particles.forEach(p => {
         p.x += p.vx;
         p.y += p.vy;
         p.life--;
     });
-    gameState.particles = gameState.particles.filter(p => p.life > 0);
+    globals.gamestate.particles = globals.gamestate.particles.filter(p => p.life > 0);
 
-    if (gameState.player.acceleration.y < 0) {
-        createThrusterParticles(gameState.player);
+    if (globals.gamestate.player.acceleration.y < 0) {
+        createThrusterParticles(globals.gamestate.player);
     }
 }
 
 function generateObstacle() {
 
     const asteroidType = Math.round(Math.random() * 6);
-    const asteroidImage = images.asteroids[asteroidType];   
-
-    const width = asteroidImage.width;
-    const height = asteroidImage.height;
+    const asteroidImage = globals.images.asteroids[asteroidType];   
+    const width = asteroidImage.obj.width;
+    const height = asteroidImage.obj.height;
     
-    gameState.obstacles.push({
-        x: Math.random() * (canvas.width - width),
+    globals.gamestate.obstacles.push({
+        x: Math.random() * (globals.canvas.width - width),
         y: -height,
         image:asteroidImage,
         width: width,
@@ -156,13 +158,72 @@ function generateObstacle() {
     });
 }
 
+
+function getOverlapArea(player, obstacle) {
+
+    const xStart = Math.max(player.position.x, obstacle.x);
+    const xOverlapWidth = Math.max(0, 
+        Math.min(
+            player.position.x + player.width,
+            obstacle.x + obstacle.width
+        ) - 
+        Math.max(
+            player.position.x, 
+            obstacle.x
+        ));
+
+    const yStart = Math.max(player.position.y, obstacle.y);
+    const yOverlapWidth = Math.max(0, 
+            Math.min(
+                player.position.y + player.height,
+                obstacle.y + obstacle.height
+            ) - 
+            Math.max(
+                player.position.y, obstacle.y
+            ));
+
+    return {
+        x: xStart,
+        y: yStart,
+        xWidth: xOverlapWidth,
+        yWidth: yOverlapWidth
+    }
+}
+
 function checkCollision(player, obstacle) {
-    return player.position.x < obstacle.x + obstacle.width &&
-           player.position.x + player.width > obstacle.x &&
-           player.position.y < obstacle.y + obstacle.height &&
-           player.position.y + player.height > obstacle.y;
+
+    const overlap = getOverlapArea(player, obstacle);
+
+    if (overlap.xOverlapWidth === 0 || overlap.yOverlapWidth === 0) 
+        return false;
+
+    /*
+  const playerData = globals.ctx.getImageData(
+    xStart - player.position.x,
+    yStart - player.position.y,
+    xOverlap, yOverlap
+  ).data;
+
+  const obstacleData = ctx.getImageData(
+    xStart - obstacle.x,
+    yStart - obstacle.y,
+    xOverlap, yOverlap
+  ).data;
+  
+  for (let i = 0; i < xOverlap * yOverlap * 4; i += 4) {
+    const playerAlpha = playerData[i + 3];
+    const obstacleAlpha = obstacleData[i + 3];
+
+    if (playerAlpha > 0 && obstacleAlpha > 0) {
+      return true; 
+    }
+  }*/
+
+  return false;
 }
 
 function resetGame() {
-    gameState = getStartGamestate();
+    globals.gamestate = getStartGamestate();
 }
+
+export {gameLoop, getStartGamestate, resetGame};

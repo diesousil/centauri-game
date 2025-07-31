@@ -1,16 +1,25 @@
+import { globals } from "./globals.js";
+import * as assets from "./assets.js";
+import * as motor from "./motor.js";
+import * as events from "./events.js";
 
-// global variables defs
-const canvas = document.getElementById('gameCanvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+async function setGlobals(canvas) {
+    globals.canvas = canvas;
+    globals.ctx = canvas.getContext('2d');
+    globals.lastTime = 0;
+    globals.gamestate = motor.getStartGamestate();
+    globals.images = await assets.loadImages();
+}
 
-const ctx = canvas.getContext('2d');
+async function start() {
+    const canvas = document.getElementById('gameCanvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-let lastTime = 0;
-let gameState = getStartGamestate();
+    await setGlobals(canvas);
+    console.log(globals);
+    events.setEventHandling(canvas);
+    motor.gameLoop(Date.now());
+}
 
-const images = loadImages();
-console.log(images);
-
-setEventHandling(canvas);
-gameLoop(Date.now());
+await start();
