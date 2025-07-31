@@ -17,7 +17,6 @@ async function start() {
     canvas.height = window.innerHeight;
 
     await setGlobals(canvas);
-    console.log(globals);
     events.setEventHandling(canvas);
     motor.gameLoop(Date.now());
 }

@@ -93,15 +93,15 @@ function renderStats() {
 function renderGameOver() {
     if (globals.gamestate.gameOver) {
         globals.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        globals.ctx.fillRect(0, 0, canvas.width, canvas.height);
+        globals.ctx.fillRect(0, 0, globals.canvas.width, globals.canvas.height);
         
         globals.ctx.fillStyle = '#fff';
         globals.ctx.font = '48px Arial';
         globals.ctx.textAlign = 'center';
-        globals.ctx.fillText('Game Over', canvas.width / 2, canvas.height / 2);
+        globals.ctx.fillText('Game Over', globals.canvas.width / 2, globals.canvas.height / 2);
         globals.ctx.font = '24px Arial';
-        globals.ctx.fillText(`Final Score: ${globals.gamestate.score}`, canvas.width / 2, canvas.height / 2 + 50);
-        globals.ctx.fillText('Clique para recomeçar', canvas.width / 2, canvas.height / 2 + 100);
+        globals.ctx.fillText(`Final Score: ${globals.gamestate.score}`, globals.canvas.width / 2, globals.canvas.height / 2 + 50);
+        globals.ctx.fillText('Clique para recomeçar', globals.canvas.width / 2, globals.canvas.height / 2 + 100);
         globals.ctx.textAlign = 'left';
     }
 }
