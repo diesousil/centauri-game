@@ -36,7 +36,7 @@ function getFlameColor() {
 }
 
 function createThrusterParticles(player) {
-    /*
+    
     const intensity = Math.max(0, -player.velocity.y);
     const count = Math.floor(5 + intensity * 20);
 
@@ -55,7 +55,7 @@ function createThrusterParticles(player) {
             color: getFlameColor()
         });
     }
-        */
+        
 }
 
 function updateVelocity() {
@@ -224,46 +224,7 @@ function checkCollision(player, obstacle) {
         return true;
     }
 
-
-
-
-
-
-    /*
-
-    const overlap = getOverlapArea(player, obstacle);
-    const playerImage = globals.images.player;
-
-    
-
-    const playerOverlapStart = {
-        x: overlap.x-player.position.x,
-        y: overlap.y-player.position.y
-    };
-
-    const obstacleOverlapStart = {
-        x: overlap.x-obstacle.x,
-        y: overlap.t-obstacle.y,
-    };
-
-    const baseIndexPlayer = playerOverlapStart.y * playerImage.obj.width + playerOverlapStart.x;
-    const baseIndexObstacle = obstacleOverlapStart.y * obstacle.image.obj.width + obstacleOverlapStart.x;
-
-    for(let i=0; i<overlap.xWidth;i++) {
-        for(let j=0;j<overlap.yHeight;j++) {
-            const playerPixelToTest = baseIndexPlayer + j * playerImage.obj.width + i;
-            const obstaclePixelToTest = baseIndexObstacle + j * obstacle.image.obj.width + i;
-
-            const playerAlpha = playerImage.data[playerPixelToTest * 4 + 3];
-            const obstacleAlpha = obstacle.image.data[obstaclePixelToTest * 4 + 3];
-
-            if (playerAlpha > 0 && obstacleAlpha > 0) 
-                return true; 
-        }
-    }
-    */
-
-  return false;
+    return false;
 }
 
 function resetGame() {
