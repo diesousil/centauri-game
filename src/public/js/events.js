@@ -1,5 +1,5 @@
-import { globals } from "./globals.js";
-import { resetGame } from "./motor.js";
+import { globals } from "/js/globals.js";
+import { resetGame } from "/js/motor.js";
 
 function setEventHandling(canvas) {
 
@@ -18,7 +18,7 @@ function setEventHandling(canvas) {
 
     function handleKeyDown(e) {
         if (globals.gamestate.gameOver) return;
-        switch(e.key) {
+        switch (e.key) {
             case 'ArrowLeft':
                 globals.gamestate.player.acceleration.x = -globals.gamestate.player.accelerationForce;
                 break;
@@ -32,11 +32,11 @@ function setEventHandling(canvas) {
                 globals.gamestate.player.acceleration.y = -globals.gamestate.player.accelerationForce;
                 break;
         }
-        
+
     }
 
     function handleKeyUp(e) {
-        switch(e.key) {
+        switch (e.key) {
             case 'ArrowLeft':
             case 'ArrowRight':
                 globals.gamestate.player.acceleration.x = 0;
@@ -46,7 +46,7 @@ function setEventHandling(canvas) {
                 globals.gamestate.player.acceleration.y = 0;
                 break;
         }
-    }   
+    }
 
     function handleTouch(e) {
         e.preventDefault();
@@ -65,15 +65,15 @@ function setEventHandling(canvas) {
         player.acceleration.y = 0;
 
         if (x < width * 0.4) {
-            player.acceleration.x = -force; 
+            player.acceleration.x = -force;
         } else if (x > width * 0.6) {
-            player.acceleration.x = force; 
+            player.acceleration.x = force;
         }
 
         if (y < height * 0.4) {
             player.acceleration.y = -force;
         } else if (y > height * 0.6) {
-            player.acceleration.y = force; 
+            player.acceleration.y = force;
         }
     }
 
@@ -91,4 +91,4 @@ function setEventHandling(canvas) {
     });
 }
 
-export {setEventHandling};
+export { setEventHandling };

@@ -1,22 +1,22 @@
-import { globals } from "./globals.js";
-import { render } from "./render.js";
+import { globals } from "/js/globals.js";
+import { render } from "/js/render.js";
 
 function getStartGamestate() {
     return {
-        player: { 
+        player: {
             position: {
-                x: globals.canvas.width / 2, 
-                y: globals.canvas.height - 100, 
+                x: globals.canvas.width / 2,
+                y: globals.canvas.height - 100,
             },
             velocity: {
-                x: 0, 
-                y: 0, 
+                x: 0,
+                y: 0,
             },
             acceleration: {
-                x: 0, 
-                y: 0, 
+                x: 0,
+                y: 0,
             },
-            width: 50, 
+            width: 50,
             height: 80,
             maxSpeed: 20,
             accelerationForce: 1.5,
@@ -36,14 +36,14 @@ function getFlameColor() {
 }
 
 function createThrusterParticles(player) {
-    
+
     const intensity = Math.max(0, -player.velocity.y);
     const count = Math.floor(5 + intensity * 20);
 
     for (let i = 0; i < count; i++) {
         const size = Math.random() * 4 + 2;
         const speed = Math.random() * 2 + 1;
-        const angle = (Math.PI / 2) + (Math.random() * 0.4 - 0.2); 
+        const angle = (Math.PI / 2) + (Math.random() * 0.4 - 0.2);
 
         globals.gamestate.particles.push({
             x: player.position.x + player.width / 2,
@@ -55,23 +55,23 @@ function createThrusterParticles(player) {
             color: getFlameColor()
         });
     }
-        
+
 }
 
 function updateVelocity() {
     globals.gamestate.player.velocity.x += globals.gamestate.player.acceleration.x
     globals.gamestate.player.velocity.y += globals.gamestate.player.acceleration.y;
-    
-    globals.gamestate.player.velocity.x = Math.max(-globals.gamestate.player.maxSpeed, 
-                                        Math.min(globals.gamestate.player.maxSpeed, globals.gamestate.player.velocity.x));
 
-    globals.gamestate.player.velocity.y = Math.max(-globals.gamestate.player.maxSpeed, 
-                                        Math.min(globals.gamestate.player.maxSpeed, globals.gamestate.player.velocity.y));
-    
+    globals.gamestate.player.velocity.x = Math.max(-globals.gamestate.player.maxSpeed,
+        Math.min(globals.gamestate.player.maxSpeed, globals.gamestate.player.velocity.x));
+
+    globals.gamestate.player.velocity.y = Math.max(-globals.gamestate.player.maxSpeed,
+        Math.min(globals.gamestate.player.maxSpeed, globals.gamestate.player.velocity.y));
+
     if (globals.gamestate.player.acceleration.x === 0) {
         globals.gamestate.player.velocity.x *= globals.gamestate.player.friction;
     }
-    
+
     if (globals.gamestate.player.acceleration.y === 0) {
         globals.gamestate.player.velocity.y *= globals.gamestate.player.friction;
     }
@@ -81,26 +81,26 @@ function updateVelocity() {
 }
 
 function updatePosition(deltaTime) {
-    
+
     globals.gamestate.player.position.x += globals.gamestate.player.velocity.x * deltaTime * 60;
     globals.gamestate.player.position.y += globals.gamestate.player.velocity.y * deltaTime * 60;
-    
-    globals.gamestate.player.position.x = Math.max(0, 
-                                       Math.min(globals.canvas.width - globals.gamestate.player.width, globals.gamestate.player.position.x));
-    globals.gamestate.player.position.y = Math.max(0, 
-                                       Math.min(globals.canvas.height - globals.gamestate.player.height, globals.gamestate.player.position.y));
+
+    globals.gamestate.player.position.x = Math.max(0,
+        Math.min(globals.canvas.width - globals.gamestate.player.width, globals.gamestate.player.position.x));
+    globals.gamestate.player.position.y = Math.max(0,
+        Math.min(globals.canvas.height - globals.gamestate.player.height, globals.gamestate.player.position.y));
 }
 
 
-function updateMovement(deltaTime) {    
+function updateMovement(deltaTime) {
     updateVelocity();
     updatePosition(deltaTime)
 }
 
 function gameLoop(timestamp) {
-    const deltaTime = (timestamp - globals.lastTime) / 1000; 
+    const deltaTime = (timestamp - globals.lastTime) / 1000;
     globals.lastTime = timestamp;
-    
+
     if (!globals.gamestate.gameOver) {
         update(deltaTime);
     }
@@ -110,22 +110,22 @@ function gameLoop(timestamp) {
 
 function update(deltaTime) {
     updateMovement(deltaTime);
-    
+
     if (Math.random() < 0.02) {
         generateObstacle();
     }
-    
+
     globals.gamestate.obstacles.forEach((obstacle, index) => {
         obstacle.y += globals.gamestate.scrollSpeed;
-        
+
         if (checkCollision(globals.gamestate.player, obstacle)) {
             globals.gamestate.gameOver = true;
         }
-        
+
         if (obstacle.y > globals.canvas.height) {
             globals.gamestate.obstacles.splice(index, 1);
             globals.gamestate.score++;
-            
+
             if (globals.gamestate.score % 5 === 0) {
                 globals.gamestate.scrollSpeed += 0.2;
             }
@@ -147,14 +147,14 @@ function update(deltaTime) {
 function generateObstacle() {
 
     const asteroidType = Math.round(Math.random() * 6);
-    const asteroidImage = globals.images.asteroids[asteroidType];   
+    const asteroidImage = globals.images.asteroids[asteroidType];
     const width = asteroidImage.obj.width;
     const height = asteroidImage.obj.height;
-    
+
     globals.gamestate.obstacles.push({
         x: Math.random() * (globals.canvas.width - width),
         y: -height,
-        image:asteroidImage,
+        image: asteroidImage,
         width: width,
         height: height
     });
@@ -164,25 +164,25 @@ function generateObstacle() {
 function getOverlapArea(player, obstacle) {
 
     const xStart = Math.max(player.position.x, obstacle.x);
-    const xOverlapWidth = Math.max(0, 
+    const xOverlapWidth = Math.max(0,
         Math.min(
             player.position.x + player.width,
             obstacle.x + obstacle.width
-        ) - 
+        ) -
         Math.max(
-            player.position.x, 
+            player.position.x,
             obstacle.x
         ));
 
     const yStart = Math.max(player.position.y, obstacle.y);
-    const yOverlapHeight = Math.max(0, 
-            Math.min(
-                player.position.y + player.height,
-                obstacle.y + obstacle.height
-            ) - 
-            Math.max(
-                player.position.y, obstacle.y
-            ));
+    const yOverlapHeight = Math.max(0,
+        Math.min(
+            player.position.y + player.height,
+            obstacle.y + obstacle.height
+        ) -
+        Math.max(
+            player.position.y, obstacle.y
+        ));
 
     return {
         x: xStart,
@@ -195,20 +195,20 @@ function getOverlapArea(player, obstacle) {
 
 function checkCollision(player, obstacle) {
 
-    const overlap = getOverlapArea(player, obstacle);    
-    
-    if (overlap.xWidth === 0 || overlap.yHeight === 0) 
+    const overlap = getOverlapArea(player, obstacle);
+
+    if (overlap.xWidth === 0 || overlap.yHeight === 0)
         return false;
 
     const obstacleCenter = {
-        x: (obstacle.x + obstacle.width)/2,
-        y: (obstacle.y + obstacle.height)/2
+        x: (obstacle.x + obstacle.width) / 2,
+        y: (obstacle.y + obstacle.height) / 2
     };
     const obstacleRadius = Math.abs(obstacleCenter.x - obstacle.x);
 
     const playerCenter = {
-        x: (player.position.x + player.width)/2,
-        y: (player.position.y + player.height)/2
+        x: (player.position.x + player.width) / 2,
+        y: (player.position.y + player.height) / 2
     }
     const playerRadius = Math.abs(playerCenter.x - player.position.x);
 
@@ -231,4 +231,4 @@ function resetGame() {
     globals.gamestate = getStartGamestate();
 }
 
-export {gameLoop, getStartGamestate, resetGame};
+export { gameLoop, getStartGamestate, resetGame };

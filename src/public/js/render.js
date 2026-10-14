@@ -1,4 +1,4 @@
-import { globals } from "./globals.js";
+import { globals } from "/js/globals.js";
 
 function drawRotatedImage(img, x, y, width, height, angle) {
     globals.ctx.save();
@@ -30,11 +30,11 @@ function renderStars() {
 
     for (let i = 0; i < numStars; i++) {
         stars.push({
-        x: Math.random() * globals.canvas.width,
-        y: Math.random() * globals.canvas.height,
-        radius: Math.random() * 1.5 + 0.2,
-        alpha: Math.random(),
-        delta: (Math.random() * 0.02) - 0.01 
+            x: Math.random() * globals.canvas.width,
+            y: Math.random() * globals.canvas.height,
+            radius: Math.random() * 1.5 + 0.2,
+            alpha: Math.random(),
+            delta: (Math.random() * 0.02) - 0.01
         });
     }
 
@@ -42,14 +42,14 @@ function renderStars() {
     globals.ctx.fillRect(0, 0, globals.canvas.width, globals.canvas.height);
 
     for (const star of stars) {
-      star.alpha += star.delta;
-      if (star.alpha <= 0 || star.alpha >= 1) star.delta *= -1;
+        star.alpha += star.delta;
+        if (star.alpha <= 0 || star.alpha >= 1) star.delta *= -1;
 
-      globals.ctx.beginPath();
-      globals.ctx.globalAlpha = star.alpha;
-      globals.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-      globals.ctx.fillStyle = 'white';
-      globals.ctx.fill();
+        globals.ctx.beginPath();
+        globals.ctx.globalAlpha = star.alpha;
+        globals.ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        globals.ctx.fillStyle = 'white';
+        globals.ctx.fill();
     }
 
     globals.ctx.globalAlpha = 1;
@@ -57,29 +57,29 @@ function renderStars() {
 
 function renderBackground() {
     globals.ctx.clearRect(0, 0, globals.canvas.width, globals.canvas.height);
-    
+
     globals.ctx.fillStyle = '#000000';
     globals.ctx.fillRect(0, 0, globals.canvas.width, globals.canvas.height);
 
     renderStars();
 }
 
-function renderPlayer() {    
+function renderPlayer() {
     drawParticles();
 
     let angle = globals.gamestate.player.velocity.x * 0.04;
-    drawRotatedImage(globals.images.player.obj, 
-                     globals.gamestate.player.position.x, 
-                     globals.gamestate.player.position.y, 
-                     globals.gamestate.player.width,
-                     globals.gamestate.player.height, angle);
+    drawRotatedImage(globals.images.player.obj,
+        globals.gamestate.player.position.x,
+        globals.gamestate.player.position.y,
+        globals.gamestate.player.width,
+        globals.gamestate.player.height, angle);
 }
 
 function renderObstacles() {
     globals.ctx.fillStyle = '#e74c3c';
-    
+
     globals.gamestate.obstacles.forEach(obstacle => {
-        const angle=0;
+        const angle = 0;
         drawRotatedImage(obstacle.image.obj, obstacle.x, obstacle.y, obstacle.width, obstacle.height, angle);
     });
 }
@@ -94,7 +94,7 @@ function renderGameOver() {
     if (globals.gamestate.gameOver) {
         globals.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
         globals.ctx.fillRect(0, 0, globals.canvas.width, globals.canvas.height);
-        
+
         globals.ctx.fillStyle = '#fff';
         globals.ctx.font = '48px Arial';
         globals.ctx.textAlign = 'center';
@@ -106,7 +106,7 @@ function renderGameOver() {
     }
 }
 
-function render() {    
+function render() {
     renderSetup();
     renderBackground();
     renderPlayer();
@@ -115,4 +115,4 @@ function render() {
     renderGameOver();
 }
 
-export {render};
+export { render };

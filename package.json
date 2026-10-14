@@ -1,0 +1,30 @@
+{
+  "name": "centauri-game",
+  "version": "0.5.1",
+  "description": "A simple vanilla javascript shooter game",
+  "keywords": [
+    "shooter",
+    "game",
+    "javascript",
+    "node"
+  ],
+  "homepage": "https://github.com/diesousil/centauri-game#readme",
+  "bugs": {
+    "url": "https://github.com/diesousil/centauri-game/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diesousil/centauri-game.git"
+  },
+  "license": "MIT",
+  "author": "Diego Silva",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

@@ -1,7 +1,7 @@
-import { globals } from "./globals.js";
-import * as assets from "./assets.js";
-import * as motor from "./motor.js";
-import * as events from "./events.js";
+import { globals } from "/js/globals.js";
+import * as assets from "/js/assets.js";
+import * as motor from "/js/motor.js";
+import * as events from "/js/events.js";
 
 async function setGlobals(canvas) {
     globals.canvas = canvas;
